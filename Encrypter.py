@@ -3,17 +3,17 @@ import tkinter as tk
 import os
 import imghdr
 
-if os.path.exists('key.key') == False: # If key.key file does not exist, create it.
-    open('key.key', 'x')
+if os.path.exists('file-encrypter.key') == False: # If file-encrypter.key file does not exist, create it.
+    open('file-encrypter.key', 'x')
 
-with open('key.key', 'rb') as filekey:
-    file_size = os.path.getsize('key.key') 
+with open('file-encrypter.key', 'rb') as filekey:
+    file_size = os.path.getsize('file-encrypter.key') 
     if file_size < 10: # If the file is empty, generate a key. Used for first time use.
-        with open('key.key', 'wb') as filekey:
+        with open('file-encrypter.key', 'wb') as filekey:
             key = Fernet.generate_key()
             filekey.write(key)
     else:
-        key = filekey.read() # Read the key from key.key file.
+        key = filekey.read() # Read the key from file-encrypter.key file.
 
 fernet = Fernet(key)
 
