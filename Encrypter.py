@@ -3,9 +3,12 @@ import tkinter as tk
 import os
 import imghdr
 
+if os.path.exists('key.key') == False: # If key.key file does not exist, create it.
+    open('key.key', 'x')
+
 with open('key.key', 'rb') as filekey:
     file_size = os.path.getsize('key.key') 
-    if file_size == 0: # If the file is empty, generate a key. Used for first time use.
+    if file_size < 10: # If the file is empty, generate a key. Used for first time use.
         with open('key.key', 'wb') as filekey:
             key = Fernet.generate_key()
             filekey.write(key)
