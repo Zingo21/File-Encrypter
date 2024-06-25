@@ -9,5 +9,6 @@ needed to decrypt the file again.
 1. run script
 2. copy & paste the filepath to the file you wish to encrypt
 3. press encrypt
+
 **How to decrypt file:**
 Same as previous but press decrypt instead.
