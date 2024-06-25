@@ -54,6 +54,7 @@ def decrypt_file(filename):
 app = tk.Tk()
 app.title("File Encrypter")
 app.geometry("300x80")
+app.resizable(False, False)
 
 frame = tk.Frame(app)
 frame.pack()
