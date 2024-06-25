@@ -1,6 +1,7 @@
 from cryptography.fernet import Fernet
 import tkinter as tk
 import os
+import imghdr
 
 with open('key.key', 'rb') as filekey:
     file_size = os.path.getsize('key.key') 
@@ -13,25 +14,38 @@ with open('key.key', 'rb') as filekey:
 
 fernet = Fernet(key)
 
-# Used to encrypt files.
-def encrypt_file(filename):
-    with open(filename, 'r') as file: # Read file contents.
+# Used to encrypt images.
+def encrypt_image(img):
+    with open(img, 'rb') as file:
         file_data = file.read()
 
-    encrypted_data = fernet.encrypt(file_data.encode()) # Encrypt file contents.
+    encrypted_data = fernet.encrypt(file_data)
 
-    with open(filename, 'w') as file: # Write encrypted data to file.
-        file.write(encrypted_data.decode())
+    with open(img, 'wb') as file:
+        file.write(encrypted_data)
+
+# Used to encrypt files.
+def encrypt_file(filename):
+    if imghdr.what(filename): # If the file is an image, encrypt it as an image.
+        encrypt_image(filename)
+    else:
+        with open(filename, 'r') as file: # Read file contents.
+            file_data = file.read()
+
+        encrypted_data = fernet.encrypt(file_data.encode()) # Encrypt file contents.
+
+        with open(filename, 'w') as file: # Write encrypted data to file.
+            file.write(encrypted_data.decode())
 
 # Used to decrypt files.
 def decrypt_file(filename):
-    with open(filename, 'r') as file: # Read file contents.
+    with open(filename, 'rb') as file: # Read file contents.
         file_data = file.read()
 
-    decrypted_data = fernet.decrypt(file_data.encode()) # Decrypt file contents.
+    decrypted_data = fernet.decrypt(file_data)
 
-    with open(filename, 'w') as file: # Write decrypted data to file.
-        file.write(decrypted_data.decode())
+    with open(filename, 'wb') as file: # Write decrypted data to file.
+        file.write(decrypted_data)
 
 # GUI
 app = tk.Tk()
