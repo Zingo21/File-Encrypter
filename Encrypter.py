@@ -6,6 +6,7 @@ import imghdr
 # TODO:
 # - ADD a way to encrypt/decrypt entire directories.
 # - ADD a way to manually select key file/path to create key file in.
+# - ADD a way to manually select file to encrypt/decrypt.
 
 if os.path.exists('file-encrypter.key') == False: # If file-encrypter.key file does not exist, create it.
     open('file-encrypter.key', 'x')
