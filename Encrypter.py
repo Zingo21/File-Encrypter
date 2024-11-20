@@ -8,7 +8,7 @@ import imghdr
 # - ADD folder encryption/decryption functionality.
 # - ADD a way to encrypt/decrypt entire directories.
 # - ADD a way to manually select key file/path to create key file in.
-# - FIX bug where the choose file button crashed the whole program.
+# - FIX bug where the select file button crashed the whole program.
 
 if os.path.exists('file-encrypter.key') == False: # If file-encrypter.key file does not exist, create it.
     open('file-encrypter.key', 'x')
