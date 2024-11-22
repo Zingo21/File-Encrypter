@@ -2,7 +2,6 @@ from cryptography.fernet import Fernet
 import tkinter as tk
 from tkinter import filedialog
 import os
-# import imghdr
 import filetype
 
 # TODO:
@@ -41,11 +40,6 @@ def encrypt_file(filename):
     kind = filetype.guess(filename)
     if kind and kind.mime.startswith('image/'): # If the file is an image, encrypt it as an image.
         encrypt_image(filename)
-
-
-    #if imghdr.what(filename): # If the file is an image, encrypt it as an image.
-    #    encrypt_image(filename)
-
     
     else:
         with open(filename, 'r') as file: # Read file contents.
