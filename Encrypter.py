@@ -2,11 +2,14 @@ from cryptography.fernet import Fernet
 import tkinter as tk
 from tkinter import filedialog
 import os
-import imghdr
+import filetype
 
 # TODO:
+# - ADD folder encryption/decryption functionality.
 # - ADD a way to encrypt/decrypt entire directories.
 # - ADD a way to manually select key file/path to create key file in.
+# - FIX bug where the select file button crashed the whole program.
+# - FIX a bug where the path field appends the same path multiple times.
 
 if os.path.exists('file-encrypter.key') == False: # If file-encrypter.key file does not exist, create it.
     open('file-encrypter.key', 'x')
@@ -34,8 +37,10 @@ def encrypt_image(img):
 
 # Used to encrypt files.
 def encrypt_file(filename):
-    if imghdr.what(filename): # If the file is an image, encrypt it as an image.
+    kind = filetype.guess(filename)
+    if kind and kind.mime.startswith('image/'): # If the file is an image, encrypt it as an image.
         encrypt_image(filename)
+    
     else:
         with open(filename, 'r') as file: # Read file contents.
             file_data = file.read()
