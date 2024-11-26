@@ -6,9 +6,10 @@ from PyQt5.QtCore import Qt
 # TODO:
 # - Add the encrypt and decrypt functions
 
-# App ID for the taskpar icon
+# App ID for the taskpar icon (Windows)
 app_id = 'File Encrypter'
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+if sys.platform == 'win32':
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
 # Window class
 class MainWindow(QMainWindow):
