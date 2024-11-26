@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
         
         # Input field for the delay
         self.delay_input = QLineEdit(self)
-        self.delay_input.setGeometry(150, 15, 100, 30)
+        self.delay_input.setGeometry(150, 15, 200, 30)
         self.delay_input.setStyleSheet("color: white;"
                                        "padding: 5px;"
                                        "border: 1px solid white;"
@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
 
         # Decrypt button
         decrypt_button = QPushButton("Decrypt", self)
-        decrypt_button.setGeometry(50, 50, 100, 30)
+        decrypt_button.setGeometry(250, 50, 100, 30)
         decrypt_button.setStyleSheet("color: white;"
                                      "padding: 5px;")
        # decrypt_button.clicked.connect(self.decrypt)
