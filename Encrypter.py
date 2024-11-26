@@ -9,7 +9,6 @@ import filetype
 # - ADD a way to encrypt/decrypt entire directories.
 # - ADD a way to manually select key file/path to create key file in.
 # - FIX bug where the select file button crashed the whole program.
-# - FIX a bug where the path field appends the same path multiple times.
 
 if os.path.exists('file-encrypter.key') == False: # If file-encrypter.key file does not exist, create it.
     open('file-encrypter.key', 'x')
@@ -61,6 +60,8 @@ def decrypt_file(filename):
         file.write(decrypted_data)
 
 def select_file():
+    filepath.delete(0, tk.END) # Clear text field.
+
     if filepath.get() == "":
         filepath_select = tk.filedialog.askopenfilename(initialdir=".", title="Select file", filetypes=(("all files", "*.*"), ("image files", "*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.tiff;*.webp"), ("text files", "*.txt;*.docx;*.doc;*.pdf;*.rtf;*.odt;*.html;*.xml;*.csv;*.json;*.log;*.md;*.tex;*.yaml;*.yml;*.ini;*.cfg;*.conf;*.properties;*.env;*.sh;*.bat;*.cmd;*.ps1;*.psm1;*.psd1;*.ps1xml;*.pssc;*.psc1")))
     else:
