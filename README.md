@@ -7,7 +7,7 @@ needed to decrypt the file again.
 
 **How to use:**
 1. Run script
-2. Copy & paste the filepath to the file you wish to encrypt
+2. Press the "Select file" button to select a file to encrypt (or copy & paste the filepath)
 3. Press encrypt
 
 **How to decrypt file:**
