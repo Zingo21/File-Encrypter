@@ -13,10 +13,7 @@ fernet = EncryptionModule.select_key_file('file-encrypter.key')
 def select_file():
     filepath.delete(0, tk.END) # Clear text field.
 
-    if filepath.get() == "":
-        filepath_select = tk.filedialog.askopenfilename(initialdir=".", title="Select file", filetypes=(("all files", "*.*"), ("image files", "*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.tiff;*.webp"), ("text files", "*.txt;*.docx;*.doc;*.pdf;*.rtf;*.odt;*.html;*.xml;*.csv;*.json;*.log;*.md;*.tex;*.yaml;*.yml;*.ini;*.cfg;*.conf;*.properties;*.env;*.sh;*.bat;*.cmd;*.ps1;*.psm1;*.psd1;*.ps1xml;*.pssc;*.psc1")))
-    else:
-        filepath_select = filepath.get()
+    filepath_select = tk.filedialog.askopenfilename(initialdir=".", title="Select file", filetypes=(("all files", "*.*"), ("image files", "*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.tiff;*.webp"), ("text files", "*.txt;*.docx;*.doc;*.pdf;*.rtf;*.odt;*.html;*.xml;*.csv;*.json;*.log;*.md;*.tex;*.yaml;*.yml;*.ini;*.cfg;*.conf;*.properties;*.env;*.sh;*.bat;*.cmd;*.ps1;*.psm1;*.psd1;*.ps1xml;*.pssc;*.psc1")))
         
     return filepath_select
 
