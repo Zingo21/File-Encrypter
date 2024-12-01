@@ -48,3 +48,24 @@ def decrypt_file(filename, fernet_key):
     with open(filename, 'wb') as file: # Write decrypted data to file.
         file.write(decrypted_data)
 
+def encrypt_directory(directory, fernet_key):
+    for root, dirs, files in os.walk(directory, topdown=True):
+        print("Encrypting directory: " + root)
+        for dir in dirs:
+            print(dir + " is a subdirectory. Skipping...")
+        for file in files:
+            print("Encrypting file: " + file)
+            file_to_encrypt = os.path.join(root, file)
+            encrypt_file(file_to_encrypt, fernet_key)
+            print("Done! \n---------------------------------")
+
+def decrypt_directory(directory, fernet_key):
+    for root, dirs, files in os.walk(directory, topdown=True):
+        print("Decrypting directory: " + root)
+        for dir in dirs:
+            print(dir + " is a subdirectory. Skipping...")
+        for file in files:
+            print("Decrypting file: " + file)
+            file_to_decrypt = os.path.join(root, file)
+            decrypt_file(file_to_decrypt, fernet_key)
+            print("Done! \n---------------------------------")
