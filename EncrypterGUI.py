@@ -43,6 +43,9 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.filepath_label)
 
         self.filepath = QLineEdit(self)
+        self.filepath.setFont(QFont('Arial', 12))
+        self.filepath.setGeometry(150, 15, 200, 30)
+        self.filepath.setStyleSheet("color: white;")
         self.layout.addWidget(self.filepath)
 
         self.select_button = QPushButton("Select file", self)
