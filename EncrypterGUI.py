@@ -13,6 +13,8 @@ app_id = 'File Encrypter'
 if sys.platform == 'win32':
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
+fernet = EncryptionModule.select_key_file('file-encrypter.key')
+
 # Window class
 class MainWindow(QMainWindow):
 
@@ -30,34 +32,72 @@ class MainWindow(QMainWindow):
     # Initialize the UI
     def initUI(self):
         
-        # Label for the delay
-        delay_label = QLabel("Path to file:", self)
-        delay_label.setFont(QFont('Arial', 12))
-        delay_label.setGeometry(50, 15, 100, 30)
-        delay_label.setStyleSheet("color: white;"
-                                  "padding: 5px;")
-        
-        # Input field for the delay
-        self.delay_input = QLineEdit(self)
-        self.delay_input.setGeometry(150, 15, 200, 30)
-        self.delay_input.setStyleSheet("color: white;"
-                                       "padding: 5px;"
-                                       "border: 1px solid white;"
-                                       "font-size: 12px;")
-        
-        # Encrypt button
-        encrypt_button = QPushButton("Encrypt", self)
-        encrypt_button.setGeometry(150, 50, 100, 30)
-        encrypt_button.setStyleSheet("color: white;"
-                                     "padding: 5px;")
-       # encrypt_button.clicked.connect(self.encrypt)
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
 
-        # Decrypt button
-        decrypt_button = QPushButton("Decrypt", self)
-        decrypt_button.setGeometry(250, 50, 100, 30)
-        decrypt_button.setStyleSheet("color: white;"
-                                     "padding: 5px;")
-       # decrypt_button.clicked.connect(self.decrypt)
+        self.layout = QVBoxLayout(self.central_widget)
+        
+        self.filepath_label = QLabel("Enter filepath:", self)
+        self.layout.addWidget(self.filepath_label)
+
+        self.filepath = QLineEdit(self)
+        self.layout.addWidget(self.filepath)
+
+        self.select_button = QPushButton("Select file", self)
+        self.select_button.clicked.connect(self.select_file)
+        self.layout.addWidget(self.select_button)
+
+        self.select_directory_button = QPushButton("Select directory", self)
+        self.select_directory_button.clicked.connect(self.select_directory)
+        self.layout.addWidget(self.select_directory_button)
+
+        self.encrypt_button = QPushButton("Encrypt", self)
+        self.encrypt_button.clicked.connect(self.encrypt)
+        self.layout.addWidget(self.encrypt_button)
+
+        self.decrypt_button = QPushButton("Decrypt", self)
+        self.decrypt_button.clicked.connect(self.decrypt)
+        self.layout.addWidget(self.decrypt_button)
+
+
+    # Select file
+    def select_file(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        filetypes = "All files (*.*);;Image files (*.png *.jpg *.jpeg *.gif *.bmp *.tiff *.webp);;Text files (*.txt *.docx *.doc *.pdf *.rtf *.odt *.html *.xml *.csv *.json *.log *.md *.tex *.yaml *.yml *.ini *.cfg *.conf *.properties *.env *.sh *.bat *.cmd *.ps1 *.psm1 *.psd1 *.ps1xml *.pssc *.psc1)"
+        filepath_select, _ = QFileDialog.getOpenFileName(self, "Select file", "", filetypes, options=options)
+        if filepath_select:
+            print("Selected file:", filepath_select)
+            self.filepath.setText(filepath_select)
+        else:
+            print("No file selected.")
+
+    # Select directory
+    def select_directory(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ShowDirsOnly
+        directory = QFileDialog.getExistingDirectory(self, "Select directory", "", options=options)
+        if directory:
+            print("Selected directory:", directory)
+            self.filepath.setText(directory)
+        else:
+            print("No directory selected.")
+
+    # Encrypt
+    def encrypt(self):
+        filepath = self.filepath.text()
+        if filepath:
+            EncryptionModule.encrypt_file(filepath, fernet)
+        else:
+            print("No file selected.")
+    
+    # Decrypt
+    def decrypt(self):
+        filepath = self.filepath.text()
+        if filepath:
+            EncryptionModule.decrypt_file(filepath, fernet)
+        else:
+            print("No file selected.")
 
 def Main():
     app = QApplication(sys.argv)
