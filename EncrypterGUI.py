@@ -1,10 +1,12 @@
-import sys, ctypes, threading
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QRadioButton, QButtonGroup
+from cryptography.fernet import Fernet
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QFileDialog, QVBoxLayout
 from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtCore import Qt
+import EncryptionModule
+import sys, ctypes
 
 # TODO:
-# - Add the encrypt and decrypt functions
+# - ADD a way to manually select key file/path to create key file in.
+# - FIX bug where the select file button crashed the whole program. (Might be OS X specific with Tkinter)
 
 # App ID for the taskpar icon (Windows)
 app_id = 'File Encrypter'
