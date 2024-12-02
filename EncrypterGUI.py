@@ -6,7 +6,7 @@ import sys, ctypes
 
 # TODO:
 # - ADD a way to manually select key file/path to create key file in.
-# - FIX bug where the select file button crashed the whole program. (Might be OS X specific with Tkinter)
+# - FIX bug where the select file button crashed the whole program. (Might be MacOS X specific with Tkinter)
 
 # App ID for the taskpar icon (Windows)
 app_id = 'File Encrypter'
