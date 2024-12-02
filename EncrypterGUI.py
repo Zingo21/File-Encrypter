@@ -38,24 +38,34 @@ class MainWindow(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
         
         self.filepath_label = QLabel("Enter filepath:", self)
+        self.filepath_label.setFont(QFont('Arial', 12))
+        self.filepath_label.setStyleSheet("color: white;")
         self.layout.addWidget(self.filepath_label)
 
         self.filepath = QLineEdit(self)
         self.layout.addWidget(self.filepath)
 
         self.select_button = QPushButton("Select file", self)
+        self.select_button.setFont(QFont('Arial', 12))
+        self.select_button.setStyleSheet("color: white;")
         self.select_button.clicked.connect(self.select_file)
         self.layout.addWidget(self.select_button)
 
         self.select_directory_button = QPushButton("Select directory", self)
+        self.select_directory_button.setFont(QFont('Arial', 12))
+        self.select_directory_button.setStyleSheet("color: white;")
         self.select_directory_button.clicked.connect(self.select_directory)
         self.layout.addWidget(self.select_directory_button)
 
         self.encrypt_button = QPushButton("Encrypt", self)
+        self.encrypt_button.setFont(QFont('Arial', 12))
+        self.encrypt_button.setStyleSheet("color: white;")
         self.encrypt_button.clicked.connect(self.encrypt)
         self.layout.addWidget(self.encrypt_button)
 
         self.decrypt_button = QPushButton("Decrypt", self)
+        self.decrypt_button.setFont(QFont('Arial', 12))
+        self.decrypt_button.setStyleSheet("color: white;")
         self.decrypt_button.clicked.connect(self.decrypt)
         self.layout.addWidget(self.decrypt_button)
 
