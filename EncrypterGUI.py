@@ -2,7 +2,7 @@ from cryptography.fernet import Fernet
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QFileDialog, QVBoxLayout
 from PyQt5.QtGui import QIcon, QFont
 import EncryptionModule
-import sys, ctypes
+import os, sys, ctypes
 
 # TODO:
 # - ADD a way to manually select key file/path to create key file in.
@@ -102,7 +102,10 @@ class MainWindow(QMainWindow):
     def encrypt(self):
         filepath = self.filepath.text()
         if filepath:
-            EncryptionModule.encrypt_file(filepath, fernet)
+            if os.path.isdir(filepath):
+                EncryptionModule.encrypt_directory(filepath, fernet)
+            else:
+                EncryptionModule.encrypt_file(filepath, fernet)
         else:
             print("No file selected.")
     
@@ -110,7 +113,10 @@ class MainWindow(QMainWindow):
     def decrypt(self):
         filepath = self.filepath.text()
         if filepath:
-            EncryptionModule.decrypt_file(filepath, fernet)
+            if os.path.isdir(filepath):
+                EncryptionModule.decrypt_directory(filepath, fernet)
+            else:
+                EncryptionModule.decrypt_file(filepath, fernet)
         else:
             print("No file selected.")
 
