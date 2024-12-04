@@ -1,4 +1,5 @@
-from cryptography.fernet import Fernet
+import binascii
+from cryptography.fernet import Fernet, InvalidToken
 import os, filetype
 
 # Used to select key file.
@@ -27,7 +28,7 @@ def encrypt_image(img, fernet_key):
 def encrypt_file(filename, fernet_key):
     kind = filetype.guess(filename)
     if kind and kind.mime.startswith('image/'): # If the file is an image, encrypt it as an image.
-        encrypt_image(filename)
+        encrypt_image(filename, fernet_key)
     
     else:
         with open(filename, 'r') as file: # Read file contents.
@@ -40,13 +41,18 @@ def encrypt_file(filename, fernet_key):
 
 # Used to decrypt files.
 def decrypt_file(filename, fernet_key):
-    with open(filename, 'rb') as file: # Read file contents.
-        file_data = file.read()
+    try: 
+        with open(filename, 'rb') as file: # Read file contents.
+            file_data = file.read()
 
-    decrypted_data = fernet_key.decrypt(file_data)
+        decrypted_data = fernet_key.decrypt(file_data)
 
-    with open(filename, 'wb') as file: # Write decrypted data to file.
-        file.write(decrypted_data)
+        with open(filename, 'wb') as file: # Write decrypted data to file.
+            file.write(decrypted_data)
+    except InvalidToken:
+        print(f"The file {filename} is already decrypted. \n---------------------------------")
+    except binascii.Error as e:
+        print(f"The file {filename} is not properly encoded. {e} \n---------------------------------")
 
 # Used to encrypt/decrypt files.
 def encrypt_directory(directory, fernet_key):
@@ -68,8 +74,13 @@ def decrypt_directory(directory, fernet_key):
         for file in files:
             print("Decrypting file: " + file)
             file_to_decrypt = os.path.join(root, file)
-            decrypt_file(file_to_decrypt, fernet_key)
-            print("Done! \n---------------------------------")
+            try:
+                decrypt_file(file_to_decrypt, fernet_key)
+            except InvalidToken:
+                print(f"The file {file_to_decrypt} is already decrypted.")
+            except binascii.Error as e:
+                print(f"The file {file_to_decrypt} is not properly encoded. {e}")
+            print("Done! \n---------------------------------")            
 
 def encrypt(filepath, fernet_key):
     if os.path.isdir(filepath):
