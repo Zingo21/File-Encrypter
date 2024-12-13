@@ -2,8 +2,10 @@ from cryptography.fernet import Fernet
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QFileDialog, QVBoxLayout
 from PyQt5.QtGui import QIcon, QFont
 from plyer import notification
+import pync
 import EncryptionModule
 import os, sys, ctypes
+import platform
 
 # TODO:
 # - ADD a way to manually select key file/path to create key file in.
@@ -126,13 +128,17 @@ class MainWindow(QMainWindow):
 
     # Show notification
     def show_notification(self, title, message):
-        notification.notify(
-            title=title,
-            message=message,
-            app_name="File Encrypter",
-            # app_icon="./assets/icon.png", # Fix this line to get an icon on notifications.
-            timeout=10
-        )
+        if platform.system() == 'Darwin': # If the system is MacOS X
+            pync.notify(title=title, message=message, sound=True)
+        
+        else:
+            notification.notify(
+                title=title,
+                message=message,
+                app_name="File Encrypter",
+                # app_icon="./assets/icon.png",
+                timeout=10
+            )
 
 def Main():
     app = QApplication(sys.argv)
