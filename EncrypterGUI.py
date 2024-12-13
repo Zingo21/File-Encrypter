@@ -1,6 +1,7 @@
 from cryptography.fernet import Fernet
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QFileDialog, QVBoxLayout
 from PyQt5.QtGui import QIcon, QFont
+from plyer import notification
 import EncryptionModule
 import os, sys, ctypes
 
