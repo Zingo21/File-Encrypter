@@ -106,8 +106,10 @@ class MainWindow(QMainWindow):
                 EncryptionModule.encrypt_directory(filepath, fernet)
             else:
                 EncryptionModule.encrypt_file(filepath, fernet)
+            self.show_notification("Success", "File(s) has been encrypted successfully!")
         else:
             print("No file selected.")
+            self.show_notification("Warning", "No file(s) selected.")
     
     # Decrypt
     def decrypt(self):
@@ -117,8 +119,20 @@ class MainWindow(QMainWindow):
                 EncryptionModule.decrypt_directory(filepath, fernet)
             else:
                 EncryptionModule.decrypt_file(filepath, fernet)
+            self.show_notification("Success", "File(s) has been decrypted successfully!")
         else:
             print("No file selected.")
+            self.show_notification("Warning", "No file(s) selected.")
+
+    # Show notification
+    def show_notification(self, title, message):
+        notification.notify(
+            title=title,
+            message=message,
+            app_name="File Encrypter",
+            # app_icon="./assets/icon.png", # Fix this line to get an icon on notifications.
+            timeout=10
+        )
 
 def Main():
     app = QApplication(sys.argv)
