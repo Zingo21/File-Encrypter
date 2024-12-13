@@ -11,6 +11,7 @@ import platform
 # - ADD a way to manually select key file/path to create key file in.
 # - ADD possibility to encrypt movie files. 
 # - FIX UI for MacOS X.
+# - FIX icon for notifications.
 
 # App ID for the taskpar icon (Windows)
 app_id = 'File Encrypter'
