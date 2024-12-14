@@ -137,14 +137,13 @@ class MainWindow(QMainWindow):
     # Show notification
     def show_notification(self, title, message):
         if platform.system() == 'Darwin': # If the system is MacOS X
-            pync.notify(title=title, message=message, sound=True)
-        
+            pync.notify(title=title, message=message, sound=True, appIcon=icon_path)
         else:
             notification.notify(
                 title=title,
                 message=message,
                 app_name="File Encrypter",
-                # app_icon="./assets/icon.png",
+                app_icon=icon_path,
                 timeout=5
             )
 
