@@ -7,6 +7,12 @@ import EncryptionModule
 import os, sys, ctypes
 import platform
 
+# Conditional import for notifications
+if platform.system() == 'Darwin': # If the system is MacOS X
+    import pync
+else:
+    from plyer import notification
+
 # TODO:
 # - ADD a way to manually select key file/path to create key file in.
 # - ADD possibility to encrypt movie files. 
