@@ -1,8 +1,6 @@
 from cryptography.fernet import Fernet
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QFileDialog, QVBoxLayout
 from PyQt5.QtGui import QIcon, QFont
-from plyer import notification
-import pync
 import EncryptionModule
 import os, sys, ctypes
 import platform
@@ -25,6 +23,9 @@ if sys.platform == 'win32':
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
 fernet = EncryptionModule.select_key_file('file-encrypter.key')
+
+# Path to icon file for notifications
+icon_path = os.path.abspath('./assets/icon.ico')
 
 # Window class
 class MainWindow(QMainWindow):
