@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
                 message=message,
                 app_name="File Encrypter",
                 # app_icon="./assets/icon.png",
-                timeout=10
+                timeout=5
             )
 
 def Main():
