@@ -25,7 +25,7 @@ if sys.platform == 'win32':
 fernet = EncryptionModule.select_key_file('file-encrypter.key')
 
 # Path to icon file for notifications
-icon_path = os.path.abspath('./assets/icon.ico')
+icon_path = os.path.abspath('./assets/icon.icns') if platform.system() == 'Darwin' else os.path.abspath('./assets/icon.ico')
 
 # Window class
 class MainWindow(QMainWindow):
