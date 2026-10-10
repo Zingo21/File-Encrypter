@@ -4,11 +4,11 @@ from PyQt5.QtGui import QIcon, QFont
 import EncryptionModule
 import os, sys, ctypes
 import platform
+import subprocess
 
 # Conditional import for notifications
-if platform.system() == 'Darwin': # If the system is MacOS X
-    import pync
-else:
+# MacOS X uses the built-in osascript instead (pync/terminal-notifier is broken on newer macOS)
+if platform.system() != 'Darwin':
     from plyer import notification
 
 # TODO:
@@ -137,7 +137,13 @@ class MainWindow(QMainWindow):
     # Show notification
     def show_notification(self, title, message):
         if platform.system() == 'Darwin': # If the system is MacOS X
-            pync.notify(title=title, message=message, sound=True, appIcon=icon_path)
+            # Escape backslashes and quotes for the AppleScript string literals
+            esc = lambda text: text.replace('\\', '\\\\').replace('"', '\\"')
+            script = f'display notification "{esc(message)}" with title "{esc(title)}" sound name "default"'
+            try:
+                subprocess.run(['osascript', '-e', script], check=True)
+            except (OSError, subprocess.CalledProcessError) as e:
+                print(f"Could not show notification: {e}")
         else:
             notification.notify(
                 title=title,
