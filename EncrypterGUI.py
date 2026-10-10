@@ -3,11 +3,19 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushBut
 from PyQt5.QtGui import QIcon, QFont
 import EncryptionModule
 import os, sys, ctypes
+import platform
+import subprocess
+
+# Conditional import for notifications
+# MacOS X uses the built-in osascript instead (pync/terminal-notifier is broken on newer macOS)
+if platform.system() != 'Darwin':
+    from plyer import notification
 
 # TODO:
 # - ADD a way to manually select key file/path to create key file in.
 # - ADD possibility to encrypt movie files. 
 # - FIX UI for Mac OS X.
+# - FIX icon for notifications.
 
 # App ID for the taskbar icon (Windows)
 app_id = 'File Encrypter'
@@ -15,6 +23,9 @@ if sys.platform == 'win32':
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
 fernet = EncryptionModule.select_key_file('file-encrypter.key')
+
+# Path to icon file for notifications
+icon_path = os.path.abspath('./assets/icon.icns') if platform.system() == 'Darwin' else os.path.abspath('./assets/icon.ico')
 
 # Window class
 class MainWindow(QMainWindow):
@@ -105,8 +116,10 @@ class MainWindow(QMainWindow):
                 EncryptionModule.encrypt_directory(filepath, fernet)
             else:
                 EncryptionModule.encrypt_file(filepath, fernet)
+            self.show_notification("Success", "File(s) has been encrypted successfully!")
         else:
             print("No file selected.")
+            self.show_notification("Warning", "No file(s) selected.")
     
     # Decrypt
     def decrypt(self):
@@ -116,8 +129,29 @@ class MainWindow(QMainWindow):
                 EncryptionModule.decrypt_directory(filepath, fernet)
             else:
                 EncryptionModule.decrypt_file(filepath, fernet)
+            self.show_notification("Success", "File(s) has been decrypted successfully!")
         else:
             print("No file selected.")
+            self.show_notification("Warning", "No file(s) selected.")
+
+    # Show notification
+    def show_notification(self, title, message):
+        if platform.system() == 'Darwin': # If the system is MacOS X
+            # Escape backslashes and quotes for the AppleScript string literals
+            esc = lambda text: text.replace('\\', '\\\\').replace('"', '\\"')
+            script = f'display notification "{esc(message)}" with title "{esc(title)}" sound name "default"'
+            try:
+                subprocess.run(['osascript', '-e', script], check=True)
+            except (OSError, subprocess.CalledProcessError) as e:
+                print(f"Could not show notification: {e}")
+        else:
+            notification.notify(
+                title=title,
+                message=message,
+                app_name="File Encrypter",
+                app_icon=icon_path,
+                timeout=5
+            )
 
 def Main():
     app = QApplication(sys.argv)
