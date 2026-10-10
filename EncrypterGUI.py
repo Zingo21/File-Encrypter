@@ -14,10 +14,10 @@ if platform.system() != 'Darwin':
 # TODO:
 # - ADD a way to manually select key file/path to create key file in.
 # - ADD possibility to encrypt movie files. 
-# - FIX UI for MacOS X.
+# - FIX UI for Mac OS X.
 # - FIX icon for notifications.
 
-# App ID for the taskpar icon (Windows)
+# App ID for the taskbar icon (Windows)
 app_id = 'File Encrypter'
 if sys.platform == 'win32':
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
