@@ -39,7 +39,7 @@ def encrypt_file(filename, fernet_key):
         with open(filename, 'w') as file: # Write encrypted data to file.
             file.write(encrypted_data.decode())
 
-# Used to decrypt files.
+# Used to decrypt files. Returns True if the file was decrypted, False if it was skipped.
 def decrypt_file(filename, fernet_key):
     try: 
         with open(filename, 'rb') as file: # Read file contents.
@@ -49,10 +49,12 @@ def decrypt_file(filename, fernet_key):
 
         with open(filename, 'wb') as file: # Write decrypted data to file.
             file.write(decrypted_data)
+        return True
     except InvalidToken:
         print(f"The file {filename} is already decrypted. \n---------------------------------")
     except binascii.Error as e:
         print(f"The file {filename} is not properly encoded. {e} \n---------------------------------")
+    return False
 
 # Used to encrypt/decrypt files.
 def encrypt_directory(directory, fernet_key):
@@ -66,7 +68,9 @@ def encrypt_directory(directory, fernet_key):
             encrypt_file(file_to_encrypt, fernet_key)
             print("Done! \n---------------------------------")
 
+# Returns a list of the files that could not be decrypted.
 def decrypt_directory(directory, fernet_key):
+    skipped = []
     for root, dirs, files in os.walk(directory, topdown=True):
         print("Decrypting directory: " + root)
         for dir in dirs:
@@ -74,13 +78,10 @@ def decrypt_directory(directory, fernet_key):
         for file in files:
             print("Decrypting file: " + file)
             file_to_decrypt = os.path.join(root, file)
-            try:
-                decrypt_file(file_to_decrypt, fernet_key)
-            except InvalidToken:
-                print(f"The file {file_to_decrypt} is already decrypted.")
-            except binascii.Error as e:
-                print(f"The file {file_to_decrypt} is not properly encoded. {e}")
-            print("Done! \n---------------------------------")            
+            if not decrypt_file(file_to_decrypt, fernet_key):
+                skipped.append(file_to_decrypt)
+            print("Done! \n---------------------------------")
+    return skipped            
 
 def encrypt(filepath, fernet_key):
     if os.path.isdir(filepath):

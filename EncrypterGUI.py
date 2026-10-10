@@ -1,5 +1,5 @@
 from cryptography.fernet import Fernet
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QFileDialog, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QFileDialog, QVBoxLayout, QMessageBox
 from PyQt5.QtGui import QIcon, QFont
 import EncryptionModule
 import os, sys, ctypes
@@ -112,11 +112,17 @@ class MainWindow(QMainWindow):
     def encrypt(self):
         filepath = self.filepath.text()
         if filepath:
-            if os.path.isdir(filepath):
-                EncryptionModule.encrypt_directory(filepath, fernet)
-            else:
-                EncryptionModule.encrypt_file(filepath, fernet)
+            try:
+                if os.path.isdir(filepath):
+                    EncryptionModule.encrypt_directory(filepath, fernet)
+                else:
+                    EncryptionModule.encrypt_file(filepath, fernet)
+            except Exception as e:
+                print(f"Could not encrypt {filepath}: {e}")
+                self.show_message(QMessageBox.Critical, "Encryption failed", f"Could not encrypt:\n{filepath}\n\n{e}")
+                return
             self.show_notification("Success", "File(s) has been encrypted successfully!")
+            self.show_message(QMessageBox.Information, "Encryption complete", f"Successfully encrypted:\n{filepath}")
         else:
             print("No file selected.")
             self.show_notification("Warning", "No file(s) selected.")
@@ -125,11 +131,22 @@ class MainWindow(QMainWindow):
     def decrypt(self):
         filepath = self.filepath.text()
         if filepath:
-            if os.path.isdir(filepath):
-                EncryptionModule.decrypt_directory(filepath, fernet)
+            try:
+                if os.path.isdir(filepath):
+                    skipped = EncryptionModule.decrypt_directory(filepath, fernet)
+                else:
+                    skipped = [] if EncryptionModule.decrypt_file(filepath, fernet) else [filepath]
+            except Exception as e:
+                print(f"Could not decrypt {filepath}: {e}")
+                self.show_message(QMessageBox.Critical, "Decryption failed", f"Could not decrypt:\n{filepath}\n\n{e}")
+                return
+            if skipped:
+                self.show_message(QMessageBox.Warning, "Decryption incomplete",
+                                  f"{len(skipped)} file(s) were not decrypted because they are already decrypted or not properly encoded.",
+                                  details="\n".join(skipped))
             else:
-                EncryptionModule.decrypt_file(filepath, fernet)
-            self.show_notification("Success", "File(s) has been decrypted successfully!")
+                self.show_notification("Success", "File(s) has been decrypted successfully!")
+                self.show_message(QMessageBox.Information, "Decryption complete", f"Successfully decrypted:\n{filepath}")
         else:
             print("No file selected.")
             self.show_notification("Warning", "No file(s) selected.")
@@ -152,6 +169,15 @@ class MainWindow(QMainWindow):
                 app_icon=icon_path,
                 timeout=5
             )
+
+    # Show a confirmation/error window
+    def show_message(self, icon, title, text, details=None):
+        # No parent, so the window doesn't inherit the main window's background stylesheet
+        message_box = QMessageBox(icon, title, text, QMessageBox.Ok)
+        message_box.setWindowIcon(self.windowIcon())
+        if details:
+            message_box.setDetailedText(details)
+        message_box.exec_()
 
 def Main():
     app = QApplication(sys.argv)
